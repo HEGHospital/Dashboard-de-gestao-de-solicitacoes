@@ -463,17 +463,6 @@ def painel():
         return
     df = snap["df"]
 
-    # --------------------------------------------------------------
-    # Debug: ver o JSON bruto (útil pra conferir o que a API realmente
-    # devolve em campos como r_os_tipo_servico ou encaminhamentos, antes
-    # de qualquer processamento)
-    # --------------------------------------------------------------
-    with st.expander("🔍 Debug: ver JSON bruto do 1º registro"):
-        if snap["bruto"]:
-            st.json(snap["bruto"][2026])
-        else:
-            st.write("Nenhum registro carregado ainda.")
-
     excluidos_removidos = snap["meta"].get("linhas_excluidas_removidas", 0)
     if excluidos_removidos:
         st.caption(
@@ -529,7 +518,7 @@ def painel_encaminhamentos():
     )
 
     if df_enc.empty:
-        st.info("Nenhum encaminhamento carregado ainda (confira o debug na aba Solicitações).")
+        st.info("Nenhum encaminhamento carregado ainda.")
         return
 
     if "status" in df_filtrado.columns:
