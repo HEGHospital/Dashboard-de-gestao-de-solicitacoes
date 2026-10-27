@@ -6,7 +6,7 @@ import threading
 import time
 from datetime import datetime
 
-st.set_page_config(page_title="Dashboard de Gestão de Solicitações", layout="wide")
+st.set_page_config(page_title="Dashboard de Gestão de Solicitações", page_icon="📊", layout="wide")
 
 # CSS para os cards de status (fonte maior, cores por status)
 st.markdown("""
@@ -390,11 +390,9 @@ def _ler_estado() -> dict:
 
 
 def _cabecalho(snap: dict) -> bool:
-    """Mostra a hora da última atualização e os erros. Devolve False quando
+    """Mostra o estado inicial de carregamento e os erros. Devolve False quando
     ainda não há dados prontos para desenhar a aba."""
-    if snap["ultima_atualizacao"]:
-        st.caption(f"🔄 Última atualização: {snap['ultima_atualizacao'].strftime('%H:%M:%S')}")
-    else:
+    if not snap["ultima_atualizacao"]:
         st.caption("🔄 Buscando os dados pela primeira vez... (pode levar alguns segundos)")
 
     if snap["erro"]:
@@ -462,13 +460,6 @@ def painel():
     if not _cabecalho(snap):
         return
     df = snap["df"]
-
-    excluidos_removidos = snap["meta"].get("linhas_excluidas_removidas", 0)
-    if excluidos_removidos:
-        st.caption(
-            f"🗑️ {excluidos_removidos} solicitações com exclusão lógica (`excluido=1`) "
-            f"foram filtradas antes de qualquer contagem."
-        )
 
     df_filtrado = _render_filtros(df, prefixo="sol")
 
